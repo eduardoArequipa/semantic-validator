@@ -24,6 +24,7 @@ jobs:
           node-version: '22'
       - run: python3 -m unittest discover -s tools -p 'test_*.py'
       - run: python3 tools/evaluate.py --dry-run
+      - run: python3 tools/evaluate.py --cases evals/field-rules.json --dry-run
       - run: python3 -m pip install -e sdk/python
       - run: python3 -m unittest discover -s sdk/python/tests -p 'test_*.py'
       - run: npm ci

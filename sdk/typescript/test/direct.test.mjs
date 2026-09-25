@@ -41,6 +41,14 @@ test("direct batch keeps order and reports item errors", async () => {
   assert.equal(calls.length, 1);
 });
 
+test("direct client sends versioned field-rule questions", async () => {
+  const { client, calls } = mock();
+  await client.validate("product_description", "Taladro de 18 V");
+  await client.validate("address", "Av. Bolívar 123");
+  assert.match(JSON.parse(calls[0].options.body).questions.result.instructions, /característica concreta/);
+  assert.match(JSON.parse(calls[1].options.body).questions.result.instructions, /dirección física/);
+});
+
 test("direct client rejects missing keys and invalid provider responses", async () => {
   assert.throws(() => new DirectValidator({ jevApiKey: "" }), /jevApiKey/);
   assert.throws(() => new DirectValidator({ jevApiKey: "key", baseURL: "http://example.com" }), /api.typesafe.ai/);

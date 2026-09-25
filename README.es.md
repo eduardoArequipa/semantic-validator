@@ -1,6 +1,6 @@
 # Semantic Validator
 
-[English](README.md) · Español
+[English](README.md) · Español · [Reglas de campos](docs/RULES.es.md) · [Resultados de evaluación](evals/RESULTS-2026-09-25.md)
 
 Valida el significado de un texto con una API REST en Go y SDKs para Python,
 TypeScript, Go y Java. Jev es el proveedor de inferencia semántica. Ejecutas

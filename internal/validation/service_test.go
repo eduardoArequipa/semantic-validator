@@ -57,6 +57,16 @@ func TestServiceRejectsInvalidValue(t *testing.T) {
 	}
 }
 
+func TestServiceValidatesNewRules(t *testing.T) {
+	service := NewService(rules.DefaultRegistry(), fakeProvider{result: providers.Result{Value: true, Confidence: .95}})
+	for _, ruleID := range []string{"product_description", "address"} {
+		result, err := service.Validate(context.Background(), ruleID, "Taladro de 18 V / Av. Bolívar 123")
+		if err != nil || result.Valid == nil || !*result.Valid {
+			t.Fatalf("rule=%s result=%+v err=%v", ruleID, result, err)
+		}
+	}
+}
+
 func TestServiceCheck(t *testing.T) {
 	service := NewService(rules.DefaultRegistry(), fakeProvider{result: providers.Result{Value: true, Confidence: .97}})
 	result, err := service.Check(context.Background(), "Necesito devolver el producto", "¿El cliente solicita una devolución?")

@@ -219,7 +219,12 @@ function isStatus(value: unknown): value is ValidationStatus {
 }
 
 const JEV_URL = "https://api.typesafe.ai";
-const NAME_QUESTION = "¿Este texto parece representar el nombre de una persona?";
+// Keep these questions in sync with internal/rules/catalog.json.
+const RULE_QUESTIONS: Readonly<Record<string, string>> = {
+  person_name: "¿Este texto parece representar el nombre de una persona?",
+  product_description: "¿El texto identifica un producto y al menos una característica concreta, más allá de una opinión genérica?",
+  address: "¿El texto parece una dirección física suficientemente específica para ubicar un lugar, y no solo el nombre de una ciudad o país?",
+};
 
 export interface DirectValidatorOptions {
   jevApiKey: string;
@@ -253,8 +258,9 @@ export class DirectValidator {
 
   validate(rule: string, value: string): Promise<ValidationResult> {
     validDirectText(value, "value");
-    if (rule !== "person_name") throw new SemanticValidatorError("requested rule is not registered", { code: "unknown_rule" });
-    return this.check(value, NAME_QUESTION);
+    const question = Object.hasOwn(RULE_QUESTIONS, rule) ? RULE_QUESTIONS[rule] : undefined;
+    if (!question) throw new SemanticValidatorError("requested rule is not registered", { code: "unknown_rule" });
+    return this.check(value, question);
   }
 
   name(value: string): Promise<ValidationResult> {

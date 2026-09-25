@@ -18,8 +18,14 @@ import (
 
 const (
 	defaultJevURL = "https://api.typesafe.ai"
-	nameQuestion  = "¿Este texto parece representar el nombre de una persona?"
 )
+
+// Keep these questions in sync with internal/rules/catalog.json.
+var directRuleQuestions = map[string]string{
+	"person_name":         "¿Este texto parece representar el nombre de una persona?",
+	"product_description": "¿El texto identifica un producto y al menos una característica concreta, más allá de una opinión genérica?",
+	"address":             "¿El texto parece una dirección física suficientemente específica para ubicar un lugar, y no solo el nombre de una ciudad o país?",
+}
 
 type DirectOptions struct {
 	BaseURL    string
@@ -81,10 +87,11 @@ func (c *DirectClient) Validate(ctx context.Context, rule, value string) (Result
 	if _, err := directText(value); err != nil {
 		return Result{}, err
 	}
-	if rule != "person_name" {
+	question, ok := directRuleQuestions[rule]
+	if !ok {
 		return Result{}, &DirectError{Code: "unknown_rule"}
 	}
-	return c.Check(ctx, value, nameQuestion)
+	return c.Check(ctx, value, question)
 }
 
 func (c *DirectClient) Name(ctx context.Context, value string) (Result, error) {

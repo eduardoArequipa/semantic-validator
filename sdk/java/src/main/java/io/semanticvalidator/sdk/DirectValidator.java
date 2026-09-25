@@ -23,7 +23,11 @@ import java.util.concurrent.Future;
 /** Server-side client that uses the caller's own Jev key without our API. */
 public final class DirectValidator {
     private static final String DEFAULT_URL = "https://api.typesafe.ai";
-    private static final String NAME_QUESTION = "¿Este texto parece representar el nombre de una persona?";
+    // Keep these questions in sync with internal/rules/catalog.json.
+    private static final Map<String, String> RULE_QUESTIONS = Map.of(
+            "person_name", "¿Este texto parece representar el nombre de una persona?",
+            "product_description", "¿El texto identifica un producto y al menos una característica concreta, más allá de una opinión genérica?",
+            "address", "¿El texto parece una dirección física suficientemente específica para ubicar un lugar, y no solo el nombre de una ciudad o país?");
 
     private final String key;
     private final String baseUrl;
@@ -56,8 +60,9 @@ public final class DirectValidator {
 
     public ValidationResult validate(String rule, String value) throws IOException, InterruptedException {
         validText(value, "value");
-        if (!"person_name".equals(rule)) throw new SemanticValidatorException("requested rule is not registered", "unknown_rule", 0);
-        return check(value, NAME_QUESTION);
+        String question = RULE_QUESTIONS.get(rule);
+        if (question == null) throw new SemanticValidatorException("requested rule is not registered", "unknown_rule", 0);
+        return check(value, question);
     }
 
     public ValidationResult name(String value) throws IOException, InterruptedException {

@@ -52,6 +52,11 @@ func TestDirectClient(t *testing.T) {
 	if err != nil || result.Valid == nil || !*result.Valid || result.Status != StatusValid {
 		t.Fatalf("unexpected result: %+v %v", result, err)
 	}
+	for _, ruleID := range []string{"product_description", "address"} {
+		if _, err := client.Validate(context.Background(), ruleID, "Ejemplo concreto"); err != nil {
+			t.Fatalf("rule %s: %v", ruleID, err)
+		}
+	}
 	negative, err := client.Check(context.Background(), "No", "¿Compra?")
 	if err != nil || negative.Valid == nil || *negative.Valid || negative.Status != StatusInvalid {
 		t.Fatalf("unexpected negative result: %+v %v", negative, err)
@@ -71,8 +76,8 @@ func TestDirectClient(t *testing.T) {
 	if len(batch) != 3 || batch[0].ID != "a" || batch[1].Error.Code != "unknown_rule" || batch[2].Error.Code != "invalid_request" {
 		t.Fatalf("unexpected batch: %+v", batch)
 	}
-	if calls != 4 {
-		t.Fatalf("expected 4 Jev calls, got %d", calls)
+	if calls != 6 {
+		t.Fatalf("expected 6 Jev calls, got %d", calls)
 	}
 }
 

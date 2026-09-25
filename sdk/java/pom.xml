@@ -6,7 +6,7 @@
 
   <groupId>io.semanticvalidator</groupId>
   <artifactId>semantic-validator-sdk</artifactId>
-  <version>0.2.0</version>
+  <version>0.3.0</version>
   <name>Semantic Validator Java SDK</name>
   <description>Java client for the Semantic Validator API</description>
   <licenses>

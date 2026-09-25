@@ -6,7 +6,8 @@ info:
   description: |
     Validate text with a registered semantic rule or ask a custom yes/no question.
     Semantic Validator uses Jev as its inference provider. Input text is not included
-    in application metrics. The current server supports the `person_name` rule.
+    in application metrics. The current server supports `person_name`,
+    `product_description`, and `address` (version 1).
     When API_KEYS_FILE is configured, individual revocable keys have persistent
     daily quotas resetting at 00:00 UTC. A decoded single operation costs one unit;
     a structurally valid batch reserves one unit per item, atomically before work.
@@ -70,7 +71,7 @@ paths:
       summary: Validate text against a registered semantic rule
       description: |
         Requires a Semantic Validator API key. The service currently registers
-        `person_name`. Values are trimmed before evaluation and must contain from
+        `person_name`, `product_description`, and `address`. Values are trimmed before evaluation and must contain from
         1 to 10,000 Unicode characters after trimming. Requests are limited to
         1 MiB. The server allows 60 authenticated requests per client IP per minute;
         the in-memory limit resets when the process restarts.
@@ -239,7 +240,7 @@ components:
         rule:
           type: string
           minLength: 1
-          description: Registered rule identifier. Currently supported value is `person_name`.
+          description: Registered rule identifier. Supported values are `person_name`, `product_description`, and `address` (v1).
           example: person_name
         value:
           type: string

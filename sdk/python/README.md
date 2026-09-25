@@ -2,6 +2,10 @@
 
 SDK síncrono sin dependencias externas: modo directo a Jev y cliente para API propia.
 
+Las reglas de campos incluidas son `person_name`, `product_description` y
+`address` (v1). Usa `validate(rule, value)`; consulta sus
+[definiciones](../../docs/RULES.es.md).
+
 ## Modo directo (recomendado)
 
 ```python

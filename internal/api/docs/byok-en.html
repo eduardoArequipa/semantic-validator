@@ -8,9 +8,11 @@
 <aside><a class="brand" href="/docs/byok-en.html">Semantic<span> / </span>Validator</a><p class="version">DOCUMENTATION · DIRECT BYOK</p><nav aria-label="Documentation"><a href="/docs/byok.html" lang="es">Español ↗</a><a href="#install">Start</a><a href="#typescript">TypeScript</a><a href="#python">Python</a><a href="#go">Go</a><a href="#java">Java</a><a href="#self-host">Own server</a><a href="#safety">Safety</a><a href="/openapi.yaml">OpenAPI ↗</a></nav></aside>
 <main id="content">
 <header><p class="eyebrow">SDK guide · bring your own Jev key</p><h1>Validate meaning<br>without our server.</h1><p class="lead">Use your own TypeSafe/Jev account from a trusted backend. The SDK sends text straight to Jev and returns <code>valid</code>, <code>confidence</code>, and <code>status</code>. No account or key from us is needed. The API hosted on this domain remains paused.</p></header>
-<section id="install"><p class="eyebrow">01 / Start</p><h2>Get your own Jev key</h2><p>The <a href="https://github.com/eduardoArequipa/semantic-validator">source is free and open source</a> under Apache-2.0. Create a key in your own TypeSafe account and make it available as <code>TYPESAFE_API_KEY</code> to your backend process. Do not commit it, paste it into frontend code, or share it with us. TypeScript, Python, and Java SDKs are not yet published to npm, PyPI, or Maven Central; the Go SDK is part of the public Go module.</p><p>The only predefined rule is <code>person_name</code>; use <code>check(value, question)</code> for your own semantic question. Confidence below <code>0.80</code> produces <code>status="uncertain"</code> and <code>valid=null</code>. Each batch item calls Jev separately and is charged to your account.</p></section>
+<section id="install"><p class="eyebrow">01 / Start</p><h2>Get your own Jev key</h2><p>The <a href="https://github.com/eduardoArequipa/semantic-validator">source is free and open source</a> under Apache-2.0. Create a key in your own TypeSafe account and make it available as <code>TYPESAFE_API_KEY</code> to your backend process. Do not commit it, paste it into frontend code, or share it with us. TypeScript, Python, and Java SDKs are not yet published to npm, PyPI, or Maven Central; the Go SDK is part of the public Go module.</p><p>The <a href="https://github.com/eduardoArequipa/semantic-validator/blob/main/docs/RULES.md">three built-in field rules</a> are <code>person_name</code>, <code>product_description</code>, and <code>address</code>; use <code>check(value, question)</code> for other semantic questions. Confidence below <code>0.80</code> produces <code>status="uncertain"</code> and <code>valid=null</code>. Each batch item calls Jev separately and is charged to your account.</p></section>
+<section id="results"><p class="eyebrow">Open evaluation</p><h2>What the rules did in one test</h2><p>In a single run of 90 fictional cases, 71 of 72 labeled cases matched; one was uncertain, with no provider errors. Ambiguous cases were tracked separately. This is <strong>not</strong> a real-world accuracy claim. Read the <a href="https://github.com/eduardoArequipa/semantic-validator/blob/main/evals/RESULTS-2026-09-25.md">full results and limitations</a>.</p></section>
 <section id="sdks"><p class="eyebrow">02 / SDKs</p><h2>Choose your language</h2>
-<h3 id="typescript">TypeScript / Node.js</h3><p>Download the <a href="/docs/downloads/semantic-validator-sdk-0.2.0.tgz">TypeScript SDK (.tgz)</a>. Node.js 18+; run on the server, never in a browser.</p><pre><code>npm install ./semantic-validator-sdk-0.2.0.tgz
+<p>The <a href="https://github.com/eduardoArequipa/semantic-validator/tree/main/examples/typescript-demo">TypeScript form example</a> shows all three rules and treats uncertain results and provider failures separately.</p>
+<h3 id="typescript">TypeScript / Node.js</h3><p>Download the <a href="/docs/downloads/semantic-validator-sdk-0.3.0.tgz">TypeScript SDK (.tgz)</a>. Node.js 18+; run on the server, never in a browser.</p><pre><code>npm install ./semantic-validator-sdk-0.3.0.tgz
 npm install -D tsx @types/node
 # Then run: npx tsx prueba.ts</code></pre><p>Save as <code>prueba.ts</code>:</p><pre><code>import { DirectValidator } from "@semantic-validator/sdk";
 
@@ -19,7 +21,7 @@ if (!jevApiKey) throw new Error("Missing TYPESAFE_API_KEY");
 const validator = new DirectValidator({ jevApiKey });
 const result = await validator.check("My order arrived damaged", "Is this a complaint?");
 console.log(result.valid, result.confidence, result.status);</code></pre>
-<h3 id="python">Python</h3><p>Download the <a href="/docs/downloads/semantic-validator-python-0.2.0.tar.gz">Python SDK (.tar.gz)</a>. Python 3.10+.</p><pre><code>tar -xzf semantic-validator-python-0.2.0.tar.gz
+<h3 id="python">Python</h3><p>Download the <a href="/docs/downloads/semantic-validator-python-0.3.0.tar.gz">Python SDK (.tar.gz)</a>. Python 3.10+.</p><pre><code>tar -xzf semantic-validator-python-0.3.0.tar.gz
 python3 -m venv .venv
 source .venv/bin/activate
 python -m pip install ./sdk/python</code></pre><pre><code>import os
@@ -28,7 +30,7 @@ from semantic_validator import DirectValidator
 validator = DirectValidator(jev_api_key=os.environ["TYPESAFE_API_KEY"])
 result = validator.name("Jorge Eduardo")
 print(result.valid, result.confidence, result.status)</code></pre>
-<h3 id="go">Go</h3><p>Go 1.22+. Install from the <a href="https://github.com/eduardoArequipa/semantic-validator">public Go module</a>, or download the <a href="/docs/downloads/semantic-validator-go-0.2.0.tar.gz">Go SDK source archive (.tar.gz)</a>.</p><pre><code>mkdir go-example &amp;&amp; cd go-example
+<h3 id="go">Go</h3><p>Go 1.22+. Install from the <a href="https://github.com/eduardoArequipa/semantic-validator">public Go module</a>, or download the <a href="/docs/downloads/semantic-validator-go-0.3.0.tar.gz">Go SDK source archive (.tar.gz)</a>.</p><pre><code>mkdir go-example &amp;&amp; cd go-example
 go mod init go-example
 go get github.com/eduardoArequipa/semantic-validator/sdk/go@latest</code></pre><p>Save as <code>main.go</code>, then run <code>go run .</code>:</p><pre><code>package main
 
@@ -47,11 +49,11 @@ func main() {
   if err != nil { log.Fatal(err) }
   fmt.Println(result.Valid, result.Confidence, result.Status)
 }</code></pre>
-<h3 id="java">Java</h3><p>Download the <a href="/docs/downloads/semantic-validator-java-0.2.0.tar.gz">Java SDK (.tar.gz)</a>. Java 11+ and Maven.</p><pre><code>tar -xzf semantic-validator-java-0.2.0.tar.gz
+<h3 id="java">Java</h3><p>Download the <a href="/docs/downloads/semantic-validator-java-0.3.0.tar.gz">Java SDK (.tar.gz)</a>. Java 11+ and Maven.</p><pre><code>tar -xzf semantic-validator-java-0.3.0.tar.gz
 mvn -f sdk/java/pom.xml install</code></pre><p>Add the local dependency to your application's <code>pom.xml</code>:</p><pre><code>&lt;dependency&gt;
   &lt;groupId&gt;io.semanticvalidator&lt;/groupId&gt;
   &lt;artifactId&gt;semantic-validator-sdk&lt;/artifactId&gt;
-  &lt;version&gt;0.2.0&lt;/version&gt;
+  &lt;version&gt;0.3.0&lt;/version&gt;
 &lt;/dependency&gt;</code></pre><pre><code>import io.semanticvalidator.sdk.DirectValidator;
 
 var validator = new DirectValidator(System.getenv("TYPESAFE_API_KEY"));

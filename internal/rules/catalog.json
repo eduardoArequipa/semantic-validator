@@ -1,0 +1,20 @@
+[
+  {
+    "id": "person_name",
+    "version": 1,
+    "question": "¿Este texto parece representar el nombre de una persona?",
+    "description": "A plausible personal name, not random characters, a role, or an organization."
+  },
+  {
+    "id": "product_description",
+    "version": 1,
+    "question": "¿El texto identifica un producto y al menos una característica concreta, más allá de una opinión genérica?",
+    "description": "A product plus at least one concrete feature; generic praise alone is insufficient."
+  },
+  {
+    "id": "address",
+    "version": 1,
+    "question": "¿El texto parece una dirección física suficientemente específica para ubicar un lugar, y no solo el nombre de una ciudad o país?",
+    "description": "A specific physical location; a city or country alone is insufficient."
+  }
+]

@@ -178,7 +178,12 @@ class Validator:
 class DirectValidator:
     """Synchronous, server-side client that sends your own Jev key straight to Jev."""
 
-    _name_question = "¿Este texto parece representar el nombre de una persona?"
+    # Keep these questions in sync with internal/rules/catalog.json.
+    _rule_questions = {
+        "person_name": "¿Este texto parece representar el nombre de una persona?",
+        "product_description": "¿El texto identifica un producto y al menos una característica concreta, más allá de una opinión genérica?",
+        "address": "¿El texto parece una dirección física suficientemente específica para ubicar un lugar, y no solo el nombre de una ciudad o país?",
+    }
 
     def __init__(self, jev_api_key: str, *, base_url: str = "https://api.typesafe.ai",
                  timeout: float = 30.0, opener: Optional[Opener] = None):
@@ -199,9 +204,10 @@ class DirectValidator:
 
     def validate(self, rule: str, value: str) -> ValidationResult:
         self._valid_text(value, "value")
-        if rule != "person_name":
+        question = self._rule_questions.get(rule) if isinstance(rule, str) else None
+        if question is None:
             raise SemanticValidatorError("requested rule is not registered", code="unknown_rule")
-        return self.check(value, self._name_question)
+        return self.check(value, question)
 
     def name(self, value: str) -> ValidationResult:
         return self.validate("person_name", value)

@@ -2,6 +2,9 @@
 
 Go clients for direct Jev BYOK and the optional self-hosted Semantic Validator API. Standard library only.
 
+Built-in field rules: `person_name`, `product_description`, and `address` (v1).
+Use `Validate(ctx, rule, value)`; see their [definitions](../../docs/RULES.md).
+
 Install with Go 1.22 or newer:
 
 ```bash

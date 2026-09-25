@@ -1,7 +1,7 @@
 {
   "name": "@semantic-validator/sdk",
-  "version": "0.2.0",
-  "description": "TypeScript SDK for the Semantic Validator API",
+  "version": "0.3.0",
+  "description": "TypeScript SDK for direct Jev semantic validation and optional self-hosted API",
   "license": "Apache-2.0",
   "type": "module",
   "files": ["dist"],

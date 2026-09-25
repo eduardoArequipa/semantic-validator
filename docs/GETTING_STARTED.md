@@ -41,7 +41,8 @@ export SEMANTIC_VALIDATOR_API_KEY=local-dev
 
 ## REST API
 
-Use the only registered rule, `person_name`:
+Use one of the three registered field rules (`person_name`,
+`product_description`, or `address`):
 
 ```bash
 curl --fail-with-body http://localhost:8080/v1/validate \
@@ -175,7 +176,7 @@ In your application's `pom.xml`:
 <dependency>
   <groupId>io.semanticvalidator</groupId>
   <artifactId>semantic-validator-sdk</artifactId>
-  <version>0.2.0</version>
+  <version>0.3.0</version>
 </dependency>
 ```
 

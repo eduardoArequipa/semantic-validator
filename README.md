@@ -1,6 +1,6 @@
 # Semantic Validator
 
-[Español](README.es.md) · [Self-hosted setup](docs/GETTING_STARTED.md) · [Open-source status](docs/OPEN_SOURCE.md)
+[Español](README.es.md) · [Field rules](docs/RULES.md) · [Self-hosted setup](docs/GETTING_STARTED.md) · [Open-source status](docs/OPEN_SOURCE.md)
 
 Semantic Validator checks what text **means**, alongside your usual format and
 required-field checks. It provides a Go REST API and SDKs for TypeScript,
@@ -12,7 +12,10 @@ Each SDK now also has a direct client that calls Jev with your key, without runn
 Use it to ask whether a product description identifies a product, whether a
 chatbot answer addresses a question, or whether a support request explains an
 observable problem. These are examples of custom questions through
-`POST /v1/check`. The only registered rule in this beta is `person_name`.
+`POST /v1/check`. The beta includes `person_name`, `product_description`, and
+`address`; see the [rule definitions and limits](docs/RULES.md) and the
+[90-case evaluation](evals/RESULTS-2026-09-25.md). The latter is a small
+fictional benchmark, not a general accuracy claim.
 
 The code is available under [Apache License 2.0](LICENSE) in the
 [GitHub repository](https://github.com/eduardoArequipa/semantic-validator);
@@ -86,7 +89,8 @@ curl --fail-with-body http://localhost:8080/v1/validate \
   -d '{"rule":"person_name","value":"Jorge Eduardo"}'
 ```
 
-Only `person_name` is a built-in rule today. `POST /v1/validate/batch` accepts
+The three built-in field rules are documented [here](docs/RULES.md).
+`POST /v1/validate/batch` accepts
 1–100 rule checks; `POST /v1/check` accepts a custom yes/no question. See the
 [OpenAPI contract](internal/api/openapi.yaml) for request and error schemas.
 

@@ -37,6 +37,8 @@ class DirectValidatorTest {
             ValidationResult result = client.name("Jorge Eduardo");
             assertEquals(Boolean.TRUE, result.getValid());
             assertEquals("valid", result.getStatus());
+            assertEquals(Boolean.TRUE, client.validate("product_description", "Taladro de 18 V").getValid());
+            assertEquals(Boolean.TRUE, client.validate("address", "Av. Bolívar 123").getValid());
             assertEquals(Boolean.FALSE, client.check("No", "¿Compra?").getValid());
             ValidationResult uncertain = client.check("Maybe", "Question");
             assertNull(uncertain.getValid());
@@ -48,7 +50,7 @@ class DirectValidatorTest {
             assertEquals(List.of("a", "b", "c"), List.of(batch.get(0).getId(), batch.get(1).getId(), batch.get(2).getId()));
             assertEquals("unknown_rule", batch.get(1).getError().getCode());
             assertEquals("invalid_request", batch.get(2).getError().getCode());
-            assertEquals(4, calls.get());
+            assertEquals(6, calls.get());
         } finally {
             server.stop(0);
         }

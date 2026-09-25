@@ -58,6 +58,19 @@ class ValidatorTests(unittest.TestCase):
 
 
 class DirectValidatorTests(unittest.TestCase):
+    def test_field_rules_use_catalog_questions(self):
+        questions = []
+
+        def opener(request, timeout):
+            questions.append(json.loads(request.data)["questions"]["result"]["instructions"])
+            return FakeResponse({"answers": {"result": {"choice": "true", "confidence": 0.96}}})
+
+        client = DirectValidator("own-key", opener=opener)
+        self.assertTrue(client.validate("product_description", "Taladro 18 V").valid)
+        self.assertTrue(client.validate("address", "Av. Bolívar 123").valid)
+        self.assertIn("característica concreta", questions[0])
+        self.assertIn("dirección física", questions[1])
+
     def test_direct_request_and_status(self):
         calls = []
 

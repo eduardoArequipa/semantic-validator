@@ -2,6 +2,9 @@
 
 Maven clients for direct Jev BYOK and the optional self-hosted Semantic Validator API. Requires Java 11+.
 
+Built-in field rules: `person_name`, `product_description`, and `address` (v1).
+Use `validate(rule, value)`; see their [definitions](../../docs/RULES.md).
+
 ## Direct Jev mode (recommended)
 
 ```java

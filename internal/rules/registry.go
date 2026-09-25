@@ -1,12 +1,20 @@
 package rules
 
-import "fmt"
+import (
+	_ "embed"
+	"encoding/json"
+	"fmt"
+)
 
 type Rule struct {
-	ID       string
-	Version  int
-	Question string
+	ID          string `json:"id"`
+	Version     int    `json:"version"`
+	Question    string `json:"question"`
+	Description string `json:"description"`
 }
+
+//go:embed catalog.json
+var defaultCatalog []byte
 
 type Registry struct {
 	rules map[string]Rule
@@ -21,11 +29,11 @@ func NewRegistry(definitions ...Rule) *Registry {
 }
 
 func DefaultRegistry() *Registry {
-	return NewRegistry(Rule{
-		ID:       "person_name",
-		Version:  1,
-		Question: "¿Este texto parece representar el nombre de una persona?",
-	})
+	var definitions []Rule
+	if err := json.Unmarshal(defaultCatalog, &definitions); err != nil {
+		panic(fmt.Sprintf("invalid built-in rule catalog: %v", err))
+	}
+	return NewRegistry(definitions...)
 }
 
 func (r *Registry) Get(id string) (Rule, error) {

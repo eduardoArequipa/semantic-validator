@@ -2,6 +2,9 @@
 
 TypeScript clients for direct Jev BYOK and for a self-hosted Semantic Validator REST API. Requires Node.js 18+.
 
+The built-in field rules are `person_name`, `product_description`, and `address` (v1).
+Use `validate(rule, value)` for them; see the [definitions](../../docs/RULES.md).
+
 ## Direct Jev mode (recommended)
 
 ```ts

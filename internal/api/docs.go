@@ -9,7 +9,7 @@ import (
 
 // Embed only the SDK guides and installable SDK packages. The old beta site is not served.
 //
-//go:embed docs/byok.html docs/byok-en.html docs/style.css docs/downloads/LICENSE docs/downloads/semantic-validator-sdk-0.1.0.tgz docs/downloads/semantic-validator-python-0.1.0.tar.gz docs/downloads/semantic-validator-go-0.1.0.tar.gz docs/downloads/semantic-validator-java-0.1.0.tar.gz docs/downloads/semantic-validator-sdk-0.2.0.tgz docs/downloads/semantic-validator-python-0.2.0.tar.gz docs/downloads/semantic-validator-go-0.2.0.tar.gz docs/downloads/semantic-validator-java-0.2.0.tar.gz
+//go:embed docs/byok.html docs/byok-en.html docs/style.css docs/downloads/LICENSE docs/downloads/semantic-validator-sdk-0.1.0.tgz docs/downloads/semantic-validator-python-0.1.0.tar.gz docs/downloads/semantic-validator-go-0.1.0.tar.gz docs/downloads/semantic-validator-java-0.1.0.tar.gz docs/downloads/semantic-validator-sdk-0.2.0.tgz docs/downloads/semantic-validator-python-0.2.0.tar.gz docs/downloads/semantic-validator-go-0.2.0.tar.gz docs/downloads/semantic-validator-java-0.2.0.tar.gz docs/downloads/semantic-validator-sdk-0.3.0.tgz docs/downloads/semantic-validator-python-0.3.0.tar.gz docs/downloads/semantic-validator-go-0.3.0.tar.gz docs/downloads/semantic-validator-java-0.3.0.tar.gz
 var documentation embed.FS
 
 // HomeHandler sends visitors straight to the SDK documentation.
@@ -62,6 +62,10 @@ func DocsHandler() http.Handler {
 			"downloads/semantic-validator-python-0.2.0.tar.gz",
 			"downloads/semantic-validator-go-0.2.0.tar.gz",
 			"downloads/semantic-validator-java-0.2.0.tar.gz":
+		case "downloads/semantic-validator-sdk-0.3.0.tgz",
+			"downloads/semantic-validator-python-0.3.0.tar.gz",
+			"downloads/semantic-validator-go-0.3.0.tar.gz",
+			"downloads/semantic-validator-java-0.3.0.tar.gz":
 		default:
 			http.NotFound(w, r)
 			return

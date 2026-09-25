@@ -1,6 +1,6 @@
 # Semantic Validator
 
-[Español](README.es.md) · [Field rules](docs/RULES.md) · [Self-hosted setup](docs/GETTING_STARTED.md) · [Open-source status](docs/OPEN_SOURCE.md)
+[Español](README.es.md) · [Field rules](docs/RULES.md) · [Install a release](docs/RELEASE.md) · [Self-hosted setup](docs/GETTING_STARTED.md) · [Open-source status](docs/OPEN_SOURCE.md)
 
 Semantic Validator checks what text **means**, alongside your usual format and
 required-field checks. It provides a Go REST API and SDKs for TypeScript,

@@ -1,0 +1,58 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '11'
+      - run: go test ./...
+      - run: go vet ./...
+      - run: python3 -m unittest discover -s tools -p 'test_*.py'
+      - run: python3 tools/evaluate.py --cases evals/field-rules.json --dry-run
+      - run: python3 -m pip install -e sdk/python
+      - run: python3 -m unittest discover -s sdk/python/tests -p 'test_*.py'
+      - run: npm ci && npm test
+        working-directory: sdk/typescript
+      - run: npm ci && npm test
+        working-directory: examples/typescript-demo
+      - run: mvn -B -f sdk/java/pom.xml package
+      - run: bash tools/build_release.sh "$GITHUB_REF_NAME"
+      - name: Publish GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          notes="docs/RELEASE_NOTES_${GITHUB_REF_NAME}.md"
+          if [ -f "$notes" ]; then
+            note_option=(--notes-file "$notes")
+          else
+            note_option=(--generate-notes)
+          fi
+          gh release create "$GITHUB_REF_NAME" \
+            dist/release/semantic-validator-sdk-*.tgz \
+            dist/release/semantic-validator-python-*.tar.gz \
+            dist/release/semantic-validator-go-*.tar.gz \
+            dist/release/semantic-validator-java-*.tar.gz \
+            dist/release/SHA256SUMS.txt \
+            --title "Semantic Validator $GITHUB_REF_NAME" \
+            "${note_option[@]}" --verify-tag

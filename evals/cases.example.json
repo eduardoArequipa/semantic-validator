@@ -1,0 +1,62 @@
+[
+  {
+    "id": "nombre-claro",
+    "rule": "person_name",
+    "value": "Jorge Eduardo",
+    "expected_valid": true
+  },
+  {
+    "id": "nombre-incomprensible",
+    "rule": "person_name",
+    "value": "sdgfxcdg",
+    "expected_valid": false
+  },
+  {
+    "id": "descripcion-concreta",
+    "value": "Taladro inalámbrico de 18 V con dos baterías y maletín",
+    "question": "¿El texto identifica un producto y alguna característica?",
+    "expected_valid": true
+  },
+  {
+    "id": "descripcion-vaga",
+    "value": "Muy bueno, excelente, lindo",
+    "question": "¿El texto identifica un producto y alguna característica?",
+    "expected_valid": false
+  },
+  {
+    "id": "solicitud-clara",
+    "value": "Al confirmar un pedido aparece un error y el pedido no se guarda",
+    "question": "¿El texto identifica una acción del sistema y un fallo observable?",
+    "expected_valid": true
+  },
+  {
+    "id": "solicitud-vaga",
+    "value": "No funciona",
+    "question": "¿El texto identifica una acción del sistema y un fallo observable?",
+    "expected_valid": false
+  },
+  {
+    "id": "english-product-clear",
+    "value": "A cordless 18 V drill with two batteries and a carrying case",
+    "question": "Does the text identify a product and at least one feature?",
+    "expected_valid": true
+  },
+  {
+    "id": "english-product-vague",
+    "value": "Great, beautiful, and excellent",
+    "question": "Does the text identify a product and at least one feature?",
+    "expected_valid": false
+  },
+  {
+    "id": "english-support-clear",
+    "value": "When I click Confirm Order, an error appears and the order is not saved",
+    "question": "Does the text identify a system action and an observable failure?",
+    "expected_valid": true
+  },
+  {
+    "id": "english-support-vague",
+    "value": "It does not work",
+    "question": "Does the text identify a system action and an observable failure?",
+    "expected_valid": false
+  }
+]

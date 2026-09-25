@@ -1,0 +1,443 @@
+openapi: 3.1.0
+info:
+  title: Semantic Validator API
+  version: 0.1.0
+  summary: Semantic validation API for text.
+  description: |
+    Validate text with a registered semantic rule or ask a custom yes/no question.
+    Semantic Validator uses Jev as its inference provider. Input text is not included
+    in application metrics. The current server supports the `person_name` rule.
+    When API_KEYS_FILE is configured, individual revocable keys have persistent
+    daily quotas resetting at 00:00 UTC. A decoded single operation costs one unit;
+    a structurally valid batch reserves one unit per item, atomically before work.
+    Cache hits, invalid values, unknown rules and provider failures consume reserved
+    units. Malformed JSON and structurally invalid batches do not. Quota exhaustion
+    returns 429 with error.code quota_exceeded and Retry-After. Successful reservations
+    include X-Quota-Limit and X-Quota-Remaining headers. Provider attempts are counted
+    separately, including failures; cached results do not increment that counter.
+servers:
+  - url: http://localhost:8080
+    description: Local development server
+tags:
+  - name: System
+  - name: Validation
+security: []
+paths:
+  /health:
+    get:
+      tags: [System]
+      operationId: health
+      summary: Check server health
+      description: Public process health endpoint. It does not check Jev connectivity.
+      responses:
+        '200':
+          description: The HTTP server is running.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthResponse'
+              example:
+                status: ok
+  /metrics:
+    get:
+      tags: [System]
+      operationId: metrics
+      summary: Read process metrics
+      description: Public Prometheus text exposition for process-local request and cache counters.
+      responses:
+        '200':
+          description: Current process metrics.
+          content:
+            text/plain:
+              schema:
+                type: string
+  /openapi.yaml:
+    get:
+      tags: [System]
+      operationId: getOpenAPISpec
+      summary: Download this OpenAPI document
+      responses:
+        '200':
+          description: OpenAPI 3.1 YAML document.
+          content:
+            application/yaml:
+              schema:
+                type: string
+  /v1/validate:
+    post:
+      tags: [Validation]
+      operationId: validate
+      summary: Validate text against a registered semantic rule
+      description: |
+        Requires a Semantic Validator API key. The service currently registers
+        `person_name`. Values are trimmed before evaluation and must contain from
+        1 to 10,000 Unicode characters after trimming. Requests are limited to
+        1 MiB. The server allows 60 authenticated requests per client IP per minute;
+        the in-memory limit resets when the process restarts.
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ValidateRequest'
+            example:
+              rule: person_name
+              value: Jorge Eduardo
+      responses:
+        '200':
+          description: The semantic validation result. `valid` is null for uncertain results.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationResult'
+              examples:
+                valid:
+                  value:
+                    valid: true
+                    confidence: 0.98
+                    status: valid
+                uncertain:
+                  value:
+                    valid: null
+                    confidence: 0.63
+                    status: uncertain
+        '400':
+          $ref: '#/components/responses/InvalidRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/UnknownRule'
+        '405':
+          $ref: '#/components/responses/MethodNotAllowed'
+        '429':
+          $ref: '#/components/responses/RateLimitExceeded'
+        '502':
+          $ref: '#/components/responses/ProviderError'
+        '503':
+          $ref: '#/components/responses/UsageUnavailable'
+        '504':
+          $ref: '#/components/responses/ProviderTimeout'
+  /v1/check:
+    post:
+      tags: [Validation]
+      operationId: check
+      summary: Evaluate a custom semantic question
+      description: |
+        Requires a Semantic Validator API key. Both `value` and `question` must
+        contain 1 to 10,000 Unicode characters after trimming. Requests are limited
+        to 1 MiB. The server allows 60 authenticated requests per client IP per minute.
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CheckRequest'
+            example:
+              value: Necesito devolver el producto porque llegó roto
+              question: ¿El cliente está solicitando una devolución?
+      responses:
+        '200':
+          description: The semantic result. `valid` is null for uncertain results.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationResult'
+        '400':
+          $ref: '#/components/responses/InvalidRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '405':
+          $ref: '#/components/responses/MethodNotAllowed'
+        '429':
+          $ref: '#/components/responses/RateLimitExceeded'
+        '502':
+          $ref: '#/components/responses/ProviderError'
+        '503':
+          $ref: '#/components/responses/UsageUnavailable'
+        '504':
+          $ref: '#/components/responses/ProviderTimeout'
+  /v1/validate/batch:
+    post:
+      tags: [Validation]
+      operationId: validateBatch
+      summary: Validate up to 100 items concurrently
+      description: |
+        Requires a Semantic Validator API key. Results preserve request order.
+        A semantic or input error for an individual item is returned in that item's
+        `error` field; it does not fail the whole batch. Each item counts as one
+        semantic validation, while the API rate limit counts this as one HTTP request.
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BatchRequest'
+            example:
+              items:
+                - id: name
+                  rule: person_name
+                  value: Jorge Eduardo
+                - id: unknown
+                  rule: missing_rule
+                  value: some text
+      responses:
+        '200':
+          description: Per-item results in the same order as the request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BatchResponse'
+              example:
+                items:
+                  - id: name
+                    valid: true
+                    confidence: 0.98
+                    status: valid
+                  - id: unknown
+                    valid: null
+                    confidence: 0
+                    status: error
+                    error:
+                      code: unknown_rule
+                      message: requested rule is not registered
+        '400':
+          $ref: '#/components/responses/InvalidRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '405':
+          $ref: '#/components/responses/MethodNotAllowed'
+        '429':
+          $ref: '#/components/responses/RateLimitExceeded'
+        '503':
+          $ref: '#/components/responses/UsageUnavailable'
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: SemanticValidatorAPIKey
+      description: Use an individual key created with the keys CLI when API_KEYS_FILE is set; otherwise use SEMANTIC_VALIDATOR_API_KEY.
+  schemas:
+    HealthResponse:
+      type: object
+      required: [status]
+      properties:
+        status:
+          type: string
+          const: ok
+    ValidateRequest:
+      type: object
+      additionalProperties: false
+      required: [rule, value]
+      properties:
+        rule:
+          type: string
+          minLength: 1
+          description: Registered rule identifier. Currently supported value is `person_name`.
+          example: person_name
+        value:
+          type: string
+          minLength: 1
+          maxLength: 10000
+          description: Text is trimmed before validation; whitespace-only values are rejected.
+    CheckRequest:
+      type: object
+      additionalProperties: false
+      required: [value, question]
+      properties:
+        value:
+          type: string
+          minLength: 1
+          maxLength: 10000
+          description: Text is trimmed before evaluation; whitespace-only values are rejected.
+        question:
+          type: string
+          minLength: 1
+          maxLength: 10000
+          description: Semantic yes/no question. Text is trimmed before evaluation.
+    ValidationResult:
+      type: object
+      additionalProperties: false
+      required: [valid, confidence, status]
+      properties:
+        valid:
+          type: [boolean, 'null']
+          description: Null when the provider confidence is below 0.80.
+          examples: [true, false, null]
+        confidence:
+          type: number
+          minimum: 0
+          maximum: 1
+        status:
+          type: string
+          enum: [valid, invalid, uncertain]
+    BatchRequest:
+      type: object
+      additionalProperties: false
+      required: [items]
+      properties:
+        items:
+          type: array
+          minItems: 1
+          maxItems: 100
+          items:
+            $ref: '#/components/schemas/BatchItem'
+    BatchItem:
+      type: object
+      additionalProperties: false
+      required: [id, rule, value]
+      properties:
+        id:
+          type: string
+          minLength: 1
+          description: Must be unique within the batch.
+        rule:
+          type: string
+          description: Registered rule identifier. Unknown rules are reported for this item.
+        value:
+          type: string
+          maxLength: 10000
+          description: Empty or whitespace-only values are reported as an item error.
+    BatchResponse:
+      type: object
+      additionalProperties: false
+      required: [items]
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/BatchResult'
+    BatchResult:
+      type: object
+      additionalProperties: false
+      required: [id, valid, confidence, status]
+      properties:
+        id:
+          type: string
+        valid:
+          type: [boolean, 'null']
+          description: Null for uncertain results and per-item errors.
+        confidence:
+          type: number
+          minimum: 0
+          maximum: 1
+        status:
+          type: string
+          enum: [valid, invalid, uncertain, error]
+        error:
+          $ref: '#/components/schemas/Error'
+      allOf:
+        - if:
+            properties:
+              status:
+                const: error
+            required: [status]
+          then:
+            required: [error]
+    Error:
+      type: object
+      additionalProperties: false
+      required: [code, message]
+      properties:
+        code:
+          type: string
+          examples: [invalid_request, unknown_rule, provider_error, provider_timeout]
+        message:
+          type: string
+    ErrorResponse:
+      type: object
+      additionalProperties: false
+      required: [error]
+      properties:
+        error:
+          $ref: '#/components/schemas/Error'
+  responses:
+    InvalidRequest:
+      description: Invalid JSON, unknown request fields, malformed input, or a request exceeding 1 MiB.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            error:
+              code: invalid_request
+              message: request must be valid JSON
+    Unauthorized:
+      description: Missing or invalid Semantic Validator API key.
+      headers:
+        WWW-Authenticate:
+          schema:
+            type: string
+          example: Bearer
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            error:
+              code: unauthorized
+              message: valid Semantic Validator API key required
+    UnknownRule:
+      description: The requested rule is not registered.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            error:
+              code: unknown_rule
+              message: requested rule is not registered
+    MethodNotAllowed:
+      description: Only POST is accepted for validation operations.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    RateLimitExceeded:
+      description: IP rate limit (rate_limit_exceeded) or individual daily validation quota (quota_exceeded) exceeded. A batch exceeding the remaining quota is rejected completely.
+      headers:
+        Retry-After:
+          description: Seconds until the client may retry.
+          schema:
+            type: integer
+            minimum: 1
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            error:
+              code: rate_limit_exceeded
+              message: request limit exceeded; retry after the current window
+    UsageUnavailable:
+      description: Key or usage storage unavailable; the operation was not started. Individual batch accounting failures appear as item errors with code usage_unavailable.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    ProviderError:
+      description: The semantic provider failed.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            error:
+              code: provider_error
+              message: semantic provider request failed
+    ProviderTimeout:
+      description: The semantic provider timed out.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            error:
+              code: provider_timeout
+              message: semantic provider request timed out

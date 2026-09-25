@@ -1,0 +1,140 @@
+[
+  {
+    "scenario": "person_name", "language": "es", "rule": "person_name",
+    "examples": [
+      ["María Fernanda López", true], ["José Luis Ramírez", true], ["Ana Sofía Pérez", true],
+      ["Lucía del Carmen Ortiz", true], ["Juan Carlos Vega", true],
+      ["xqzplm", false], ["739205184", false], ["Taladro Bosch 750W", false],
+      ["www.ejemplo.com", false], ["Factura número 382", false]
+    ]
+  },
+  {
+    "scenario": "person_name", "language": "en", "rule": "person_name",
+    "examples": [
+      ["Emily Carter", true], ["Michael James Brown", true], ["Olivia Grace Wilson", true],
+      ["Daniel Robert Lee", true], ["Sarah Elizabeth Moore", true],
+      ["qzxvbn", false], ["482916307", false], ["Cordless drill 18V", false],
+      ["order-583921", false], ["support@example.com", false]
+    ]
+  },
+  {
+    "scenario": "complaint", "language": "es", "question": "¿El cliente está presentando un reclamo por un producto o servicio?",
+    "examples": [
+      ["Mi pedido llegó roto y quiero reclamar.", true],
+      ["Me cobraron dos veces por el mismo pedido; necesito una solución.", true],
+      ["Llevo una semana esperando y nadie responde a mi reclamo.", true],
+      ["El artículo dejó de funcionar al segundo día; exijo una solución.", true],
+      ["El envío llegó incompleto y esto no es lo que pagué.", true],
+      ["Gracias, el pedido llegó en perfecto estado.", false],
+      ["Quiero saber cuáles son los horarios de atención.", false],
+      ["No tengo ningún reclamo; todo funciona bien.", false],
+      ["¿Puedo comprar otro producto igual?", false],
+      ["El cliente dijo que no desea presentar una queja.", false]
+    ]
+  },
+  {
+    "scenario": "complaint", "language": "en", "question": "Is the customer making a complaint about a product or service?",
+    "examples": [
+      ["My order arrived broken and I want to file a complaint.", true],
+      ["I was charged twice for one order; please fix this.", true],
+      ["I have waited a week and nobody has answered my complaint.", true],
+      ["The device stopped working on day two; I need a resolution.", true],
+      ["Half of my order is missing; this is unacceptable.", true],
+      ["Thanks, everything arrived in perfect condition.", false],
+      ["What are your opening hours?", false],
+      ["I have no complaint; everything works fine.", false],
+      ["Can I buy another one?", false],
+      ["The customer said they did not want to submit a complaint.", false]
+    ]
+  },
+  {
+    "scenario": "purchase_intent", "language": "es", "question": "¿El cliente expresa intención de comprar un producto o servicio?",
+    "examples": [
+      ["Quiero comprar el taladro de 18 V hoy.", true],
+      ["¿Cómo pago para llevarme este producto?", true],
+      ["Resérvenme dos unidades; las compro esta tarde.", true],
+      ["Envíame el enlace de pago, quiero contratar el plan.", true],
+      ["Voy a hacer el pedido ahora mismo.", true],
+      ["No quiero comprar nada; solo necesito soporte.", false],
+      ["Mi pedido anterior llegó roto y deseo reclamar.", false],
+      ["Solo estoy comparando precios, todavía no voy a comprar.", false],
+      ["Ya compré el producto ayer; necesito la factura.", false],
+      ["¿Cuál es el horario de la tienda?", false]
+    ]
+  },
+  {
+    "scenario": "purchase_intent", "language": "en", "question": "Does the customer express an intent to buy a product or service?",
+    "examples": [
+      ["I want to buy the 18 V drill today.", true],
+      ["How can I pay for this item?", true],
+      ["Please reserve two units; I will purchase them this afternoon.", true],
+      ["Send me the payment link so I can subscribe to the plan.", true],
+      ["I am placing the order now.", true],
+      ["I do not want to buy anything; I only need support.", false],
+      ["My previous order arrived broken and I want to complain.", false],
+      ["I am comparing prices, not ready to buy yet.", false],
+      ["I bought it yesterday and need the invoice.", false],
+      ["What are your store hours?", false]
+    ]
+  },
+  {
+    "scenario": "product_description", "language": "es", "question": "¿El texto identifica un producto y al menos una característica concreta?",
+    "examples": [
+      ["Taladro inalámbrico Bosch de 18 V con dos baterías.", true],
+      ["Mesa de madera de pino de 120 por 60 centímetros.", true],
+      ["Auriculares Bluetooth negros con cancelación de ruido.", true],
+      ["Lámpara LED de escritorio con tres niveles de brillo.", true],
+      ["Mochila impermeable de 25 litros con compartimento para portátil.", true],
+      ["Muy bueno y bonito.", false],
+      ["Producto excelente.", false],
+      ["¡Aprovecha esta oferta!", false],
+      ["La mejor calidad para ti.", false],
+      ["Mañana abrimos a las nueve.", false]
+    ]
+  },
+  {
+    "scenario": "product_description", "language": "en", "question": "Does the text identify a product and at least one concrete feature?",
+    "examples": [
+      ["Bosch 18 V cordless drill with two batteries.", true],
+      ["Pine wood table measuring 120 by 60 centimeters.", true],
+      ["Black Bluetooth headphones with noise cancellation.", true],
+      ["LED desk lamp with three brightness levels.", true],
+      ["Waterproof 25-liter backpack with a laptop compartment.", true],
+      ["Very good and beautiful.", false],
+      ["Excellent product.", false],
+      ["Do not miss this deal!", false],
+      ["The best quality for you.", false],
+      ["We open at nine tomorrow.", false]
+    ]
+  },
+  {
+    "scenario": "failure_report", "language": "es", "question": "¿El texto identifica una acción del sistema y un fallo observable?",
+    "examples": [
+      ["Al pulsar Guardar, aparece un error y los cambios se pierden.", true],
+      ["Cuando intento iniciar sesión, la pantalla queda en blanco.", true],
+      ["Después de enviar el formulario, la página se congela.", true],
+      ["Al descargar el informe, recibo un archivo vacío.", true],
+      ["Si confirmo el pedido, aparece un mensaje 500.", true],
+      ["La aplicación funciona bien.", false],
+      ["No funciona.", false],
+      ["¿Dónde está el botón de guardar?", false],
+      ["Quiero comprar una licencia.", false],
+      ["El diseño es bonito, gracias.", false]
+    ]
+  },
+  {
+    "scenario": "failure_report", "language": "en", "question": "Does the text identify a system action and an observable failure?",
+    "examples": [
+      ["When I click Save, an error appears and my changes disappear.", true],
+      ["When I try to log in, the screen turns blank.", true],
+      ["After submitting the form, the page freezes.", true],
+      ["When I download the report, I get an empty file.", true],
+      ["If I confirm the order, I see an HTTP 500 error.", true],
+      ["The app is working well.", false],
+      ["It does not work.", false],
+      ["Where is the Save button?", false],
+      ["I want to buy a license.", false],
+      ["The design looks nice, thank you.", false]
+    ]
+  }
+]

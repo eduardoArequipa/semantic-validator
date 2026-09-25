@@ -1,0 +1,25 @@
+services:
+  semantic-validator:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    env_file:
+      - .env
+    environment:
+      DOCS_ONLY: "true"
+      TRUST_PROXY_HEADERS: "true"
+    ports:
+      - "127.0.0.1:${HOST_PORT:-18081}:${PORT:-8080}"
+    restart: unless-stopped
+    init: true
+    read_only: true
+    tmpfs:
+      - /tmp
+    volumes:
+      - access-data:/data
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+volumes:
+  access-data:

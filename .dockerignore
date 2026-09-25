@@ -1,0 +1,14 @@
+.git
+.env
+.env.*
+!.env.example
+sdk/
+node_modules/
+**/node_modules/
+**/.venv/
+**/__pycache__/
+**/target/
+**/dist/
+coverage.out
+data/
+internal/api/docs/downloads/semantic-validator-demo-typescript-0.1.0.tar.gz

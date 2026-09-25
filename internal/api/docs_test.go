@@ -49,6 +49,15 @@ func TestDocumentationOnlySite(t *testing.T) {
 				t.Errorf("%s: missing %s", path, expected)
 			}
 		}
+		for _, expected := range []string{
+			"product_description", "validator.check(", "client.Check(",
+			"uncertain", "semantic-validator/sdk/python", "semantic-validator/sdk/java",
+			"sdk/go@v0.3.0",
+		} {
+			if !strings.Contains(page.Body.String(), expected) {
+				t.Errorf("%s: incomplete usage guide, missing %s", path, expected)
+			}
+		}
 		if !strings.Contains(page.Header().Get("Content-Security-Policy"), "connect-src 'none'") {
 			t.Errorf("%s: docs must not call the API", path)
 		}

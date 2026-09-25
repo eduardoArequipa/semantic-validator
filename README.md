@@ -1,6 +1,6 @@
 # Semantic Validator
 
-[Español](README.es.md) · [Field rules](docs/RULES.md) · [Install a release](docs/RELEASE.md) · [Self-hosted setup](docs/GETTING_STARTED.md) · [Open-source status](docs/OPEN_SOURCE.md)
+[Español](README.es.md) · [Usage examples](https://validator.trialsur.cloud/docs/byok-en.html#usage) · [Field rules](docs/RULES.md) · [Install a release](docs/RELEASE.md) · [Self-hosted setup](docs/GETTING_STARTED.md) · [Open-source status](docs/OPEN_SOURCE.md)
 
 Semantic Validator checks what text **means**, alongside your usual format and
 required-field checks. It provides a Go REST API and SDKs for TypeScript,
@@ -97,7 +97,9 @@ The three built-in field rules are documented [here](docs/RULES.md).
 ## SDKs and examples
 
 The [online SDK guide](https://validator.trialsur.cloud/docs/byok-en.html)
-covers direct and self-hosted setup plus downloadable TypeScript, Python, Go, and Java SDKs. The
+includes complete use examples for TypeScript, Python, Go, and Java: a built-in
+rule, a custom question, uncertain results, and provider errors. It also covers
+direct and self-hosted setup plus downloadable SDKs. The
 previous product landing page and hosted demo are no longer served. The
 production Compose file is configured with `DOCS_ONLY=true`: only SDK/API
 documentation stays online, while `/v1/*` returns 503

@@ -5,34 +5,63 @@
 <title>SDK documentation · Semantic Validator</title><link rel="stylesheet" href="/docs/style.css"></head>
 <body>
 <a class="skip" href="#content">Skip to content</a><div class="product-return"><a href="/">← Semantic Validator</a></div>
-<aside><a class="brand" href="/docs/byok-en.html">Semantic<span> / </span>Validator</a><p class="version">DOCUMENTATION · DIRECT BYOK</p><nav aria-label="Documentation"><a href="/docs/byok.html" lang="es">Español ↗</a><a href="#install">Start</a><a href="#typescript">TypeScript</a><a href="#python">Python</a><a href="#go">Go</a><a href="#java">Java</a><a href="#self-host">Own server</a><a href="#safety">Safety</a><a href="/openapi.yaml">OpenAPI ↗</a></nav></aside>
+<aside><a class="brand" href="/docs/byok-en.html">Semantic<span> / </span>Validator</a><p class="version">DOCUMENTATION · DIRECT BYOK</p><nav aria-label="Documentation"><a href="/docs/byok.html" lang="es">Español ↗</a><a href="#install">Start</a><a href="#usage">How to use</a><a href="#typescript">TypeScript</a><a href="#python">Python</a><a href="#go">Go</a><a href="#java">Java</a><a href="#self-host">Own server</a><a href="#safety">Safety</a><a href="/openapi.yaml">OpenAPI ↗</a></nav></aside>
 <main id="content">
 <header><p class="eyebrow">SDK guide · bring your own Jev key</p><h1>Validate meaning<br>without our server.</h1><p class="lead">Use your own TypeSafe/Jev account from a trusted backend. The SDK sends text straight to Jev and returns <code>valid</code>, <code>confidence</code>, and <code>status</code>. No account or key from us is needed. The API hosted on this domain remains paused.</p></header>
 <section id="install"><p class="eyebrow">01 / Start</p><h2>Get your own Jev key</h2><p>The <a href="https://github.com/eduardoArequipa/semantic-validator">source is free and open source</a> under Apache-2.0. Create a key in your own TypeSafe account and make it available as <code>TYPESAFE_API_KEY</code> to your backend process. Do not commit it, paste it into frontend code, or share it with us. TypeScript, Python, and Java SDKs are not yet published to npm, PyPI, or Maven Central; the Go SDK is part of the public Go module.</p><p>The <a href="https://github.com/eduardoArequipa/semantic-validator/blob/main/docs/RULES.md">three built-in field rules</a> are <code>person_name</code>, <code>product_description</code>, and <code>address</code>; use <code>check(value, question)</code> for other semantic questions. Confidence below <code>0.80</code> produces <code>status="uncertain"</code> and <code>valid=null</code>. Each batch item calls Jev separately and is charged to your account.</p></section>
+<section id="usage"><p class="eyebrow">02 / How to use</p><h2>From text to a decision</h2><p>After installing an SDK, create a <code>DirectValidator</code> (or <code>NewDirectClient</code> in Go) with your Jev key. Call <code>validate("product_description", text)</code> for a registered rule, or <code>check(text, question)</code> for your own yes/no question. Read <code>status</code> before acting: <code>uncertain</code> means <code>valid</code> is null and needs review; an exception or error means the request failed, not that the text is invalid. A complete example for each language follows. A <code>.env</code> file is not loaded automatically: make sure <code>TYPESAFE_API_KEY</code> is available to your process.</p></section>
 <section id="results"><p class="eyebrow">Open evaluation</p><h2>What the rules did in one test</h2><p>In a single run of 90 fictional cases, 71 of 72 labeled cases matched; one was uncertain, with no provider errors. Ambiguous cases were tracked separately. This is <strong>not</strong> a real-world accuracy claim. Read the <a href="https://github.com/eduardoArequipa/semantic-validator/blob/main/evals/RESULTS-2026-09-25.md">full results and limitations</a>.</p></section>
-<section id="sdks"><p class="eyebrow">02 / SDKs</p><h2>Choose your language</h2>
+<section id="sdks"><p class="eyebrow">03 / SDKs</p><h2>Choose your language</h2>
 <p>The <a href="https://github.com/eduardoArequipa/semantic-validator/tree/main/examples/typescript-demo">TypeScript form example</a> shows all three rules and treats uncertain results and provider failures separately.</p>
 <h3 id="typescript">TypeScript / Node.js</h3><p>Download the <a href="/docs/downloads/semantic-validator-sdk-0.3.0.tgz">TypeScript SDK (.tgz)</a>. Node.js 18+; run on the server, never in a browser.</p><pre><code>npm install ./semantic-validator-sdk-0.3.0.tgz
-npm install -D tsx @types/node
-# Then run: npx tsx prueba.ts</code></pre><p>Save as <code>prueba.ts</code>:</p><pre><code>import { DirectValidator } from "@semantic-validator/sdk";
+npm install -D tsx @types/node</code></pre><p>Save as <code>prueba.ts</code> and run <code>npx tsx prueba.ts</code>:</p><pre><code>import { DirectValidator } from "@semantic-validator/sdk";
 
 const jevApiKey = process.env.TYPESAFE_API_KEY;
 if (!jevApiKey) throw new Error("Missing TYPESAFE_API_KEY");
 const validator = new DirectValidator({ jevApiKey });
-const result = await validator.check("My order arrived damaged", "Is this a complaint?");
-console.log(result.valid, result.confidence, result.status);</code></pre>
+
+async function main() {
+  const product = await validator.validate(
+    "product_description", "Bosch 750 W power drill"
+  );
+  const complaint = await validator.check(
+    "My order arrived damaged and I need a solution",
+    "Is the customer making a complaint?"
+  );
+  for (const [field, result] of [["product", product], ["complaint", complaint]] as const) {
+    if (result.status === "uncertain") console.log(field, "needs review");
+    else console.log(field, result.valid, result.confidence);
+  }
+}
+
+main().catch((error) =&gt; {
+  console.error("Validation request failed:", error);
+  process.exitCode = 1;
+});</code></pre>
 <h3 id="python">Python</h3><p>Download the <a href="/docs/downloads/semantic-validator-python-0.3.0.tar.gz">Python SDK (.tar.gz)</a>. Python 3.10+.</p><pre><code>tar -xzf semantic-validator-python-0.3.0.tar.gz
 python3 -m venv .venv
 source .venv/bin/activate
-python -m pip install ./sdk/python</code></pre><pre><code>import os
+python -m pip install ./semantic-validator/sdk/python</code></pre><p>Save as <code>prueba.py</code> and run <code>python prueba.py</code>:</p><pre><code>import os
 from semantic_validator import DirectValidator
 
+def show(field, result):
+    if result.status == "uncertain":
+        print(field, "needs review")
+    else:
+        print(field, result.valid, result.confidence)
+
 validator = DirectValidator(jev_api_key=os.environ["TYPESAFE_API_KEY"])
-result = validator.name("Jorge Eduardo")
-print(result.valid, result.confidence, result.status)</code></pre>
+try:
+    show("name", validator.name("Jorge Eduardo"))
+    show("complaint", validator.check(
+        "My order arrived damaged and I need a solution",
+        "Is the customer making a complaint?"
+    ))
+except Exception as error:
+    raise SystemExit(f"Validation request failed: {error}") from error</code></pre>
 <h3 id="go">Go</h3><p>Go 1.22+. Install from the <a href="https://github.com/eduardoArequipa/semantic-validator">public Go module</a>, or download the <a href="/docs/downloads/semantic-validator-go-0.3.0.tar.gz">Go SDK source archive (.tar.gz)</a>.</p><pre><code>mkdir go-example &amp;&amp; cd go-example
 go mod init go-example
-go get github.com/eduardoArequipa/semantic-validator/sdk/go@latest</code></pre><p>Save as <code>main.go</code>, then run <code>go run .</code>:</p><pre><code>package main
+go get github.com/eduardoArequipa/semantic-validator/sdk/go@v0.3.0</code></pre><p>Save as <code>main.go</code>, then run <code>go run .</code>:</p><pre><code>package main
 
 import (
   "context"
@@ -45,24 +74,58 @@ import (
 func main() {
   client, err := validator.NewDirectClient(os.Getenv("TYPESAFE_API_KEY"))
   if err != nil { log.Fatal(err) }
-  result, err := client.Name(context.Background(), "Jorge Eduardo")
+  name, err := client.Name(context.Background(), "Jorge Eduardo")
   if err != nil { log.Fatal(err) }
-  fmt.Println(result.Valid, result.Confidence, result.Status)
+  complaint, err := client.Check(context.Background(),
+    "My order arrived damaged and I need a solution",
+    "Is the customer making a complaint?")
+  if err != nil { log.Fatal(err) }
+  show("name", name)
+  show("complaint", complaint)
+}
+
+func show(field string, result validator.Result) {
+  if result.Status == "uncertain" {
+    fmt.Println(field, "needs review")
+    return
+  }
+  fmt.Println(field, *result.Valid, result.Confidence)
 }</code></pre>
 <h3 id="java">Java</h3><p>Download the <a href="/docs/downloads/semantic-validator-java-0.3.0.tar.gz">Java SDK (.tar.gz)</a>. Java 11+ and Maven.</p><pre><code>tar -xzf semantic-validator-java-0.3.0.tar.gz
-mvn -f sdk/java/pom.xml install</code></pre><p>Add the local dependency to your application's <code>pom.xml</code>:</p><pre><code>&lt;dependency&gt;
+mvn -f semantic-validator/sdk/java/pom.xml install</code></pre><p>Add the local dependency to your Maven application's <code>pom.xml</code>:</p><pre><code>&lt;dependency&gt;
   &lt;groupId&gt;io.semanticvalidator&lt;/groupId&gt;
   &lt;artifactId&gt;semantic-validator-sdk&lt;/artifactId&gt;
   &lt;version&gt;0.3.0&lt;/version&gt;
-&lt;/dependency&gt;</code></pre><pre><code>import io.semanticvalidator.sdk.DirectValidator;
+&lt;/dependency&gt;</code></pre><p>Save as <code>Example.java</code> in your Maven application and run it there:</p><pre><code>import io.semanticvalidator.sdk.DirectValidator;
+import io.semanticvalidator.sdk.ValidationResult;
 
-var validator = new DirectValidator(System.getenv("TYPESAFE_API_KEY"));
-var result = validator.name("Jorge Eduardo");
-System.out.println(result.getValid()); // null means uncertain</code></pre></section>
-<section id="self-host"><p class="eyebrow">03 / Optional</p><h2>Run your own API server</h2><p>If you need an HTTP API or central quotas, run the Go server on your infrastructure with your own <code>TYPESAFE_API_KEY</code>. Then set a separate <code>SEMANTIC_VALIDATOR_API_KEY</code> for its callers and use the legacy <code>Validator</code> clients. The server is not required for direct mode.</p><pre><code>cp .env.example .env
+public class Example {
+  public static void main(String[] args) {
+    String key = System.getenv("TYPESAFE_API_KEY");
+    if (key == null || key.isBlank()) throw new IllegalStateException("Missing TYPESAFE_API_KEY");
+    DirectValidator validator = new DirectValidator(key);
+    try {
+      show("name", validator.name("Jorge Eduardo"));
+      show("complaint", validator.check(
+        "My order arrived damaged and I need a solution",
+        "Is the customer making a complaint?"));
+    } catch (Exception error) {
+      System.err.println("Validation request failed: " + error.getMessage());
+      System.exit(1);
+    }
+  }
+
+  static void show(String field, ValidationResult result) {
+    if ("uncertain".equals(result.getStatus()))
+      System.out.println(field + ": needs review");
+    else
+      System.out.println(field + ": " + result.getValid() + " (" + result.getConfidence() + ")");
+  }
+}</code></pre></section>
+<section id="self-host"><p class="eyebrow">04 / Optional</p><h2>Run your own API server</h2><p>If you need an HTTP API or central quotas, run the Go server on your infrastructure with your own <code>TYPESAFE_API_KEY</code>. Then set a separate <code>SEMANTIC_VALIDATOR_API_KEY</code> for its callers and use the legacy <code>Validator</code> clients. The server is not required for direct mode.</p><pre><code>cp .env.example .env
 # Set both keys in .env; keep it private.
 set -a; source .env; set +a
 go run ./cmd/server
 # Own server only: http://localhost:8080/v1/check</code></pre><p>See the <a href="/openapi.yaml">OpenAPI contract</a> for your own server. Never send a Jev key as its Semantic Validator API key.</p></section>
-<section id="safety"><p class="eyebrow">04 / Responsible use</p><h2>Protect keys and user text</h2><p>Direct calls require a trusted backend. The text goes to Jev, not to this website. Avoid real personal data in public examples. Apache-2.0 covers our code, not Jev; use your own TypeSafe account subject to its terms. Our hosted API remains disabled and this site serves documentation only.</p></section>
+<section id="safety"><p class="eyebrow">05 / Responsible use</p><h2>Protect keys and user text</h2><p>Direct calls require a trusted backend. The text goes to Jev, not to this website. Avoid real personal data in public examples. Apache-2.0 covers our code, not Jev; use your own TypeSafe account subject to its terms. Our hosted API remains disabled and this site serves documentation only.</p></section>
 </main></body></html>

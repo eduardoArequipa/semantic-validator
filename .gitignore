@@ -16,6 +16,7 @@
 /sdk/typescript/dist/
 /sdk/typescript/*.tgz
 /sdk/java/target/
+/examples/java-direct/target/
 coverage.out
 /data/
 /examples/typescript-demo/node_modules/

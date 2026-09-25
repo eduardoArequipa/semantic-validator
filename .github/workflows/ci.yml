@@ -27,6 +27,7 @@ jobs:
       - run: python3 tools/evaluate.py --cases evals/field-rules.json --dry-run
       - run: python3 -m pip install -e sdk/python
       - run: python3 -m unittest discover -s sdk/python/tests -p 'test_*.py'
+      - run: python3 -m unittest discover -s examples/python-direct -p 'test_*.py'
       - run: npm ci
         working-directory: sdk/typescript
       - run: npm test
@@ -43,4 +44,5 @@ jobs:
         with:
           distribution: temurin
           java-version: '11'
-      - run: mvn -B -f sdk/java/pom.xml package
+      - run: mvn -B -f sdk/java/pom.xml install
+      - run: mvn -B -f examples/java-direct/pom.xml test

@@ -1,6 +1,6 @@
 # Semantic Validator
 
-[Español](README.es.md) · [Usage examples](https://validator.trialsur.cloud/docs/byok-en.html#usage) · [Field rules](docs/RULES.md) · [Install a release](docs/RELEASE.md) · [Self-hosted setup](docs/GETTING_STARTED.md) · [Open-source status](docs/OPEN_SOURCE.md)
+[Español](README.es.md) · [Runnable SDK examples](examples/README.md) · [Usage guide](https://validator.trialsur.cloud/docs/byok-en.html#usage) · [Field rules](docs/RULES.md) · [Install a release](docs/RELEASE.md) · [Self-hosted setup](docs/GETTING_STARTED.md) · [Open-source status](docs/OPEN_SOURCE.md)
 
 Semantic Validator checks what text **means**, alongside your usual format and
 required-field checks. It provides a Go REST API and SDKs for TypeScript,

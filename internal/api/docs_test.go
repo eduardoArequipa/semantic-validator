@@ -51,8 +51,12 @@ func TestDocumentationOnlySite(t *testing.T) {
 		}
 		for _, expected := range []string{
 			"product_description", "validator.check(", "client.Check(",
-			"uncertain", "semantic-validator/sdk/python", "semantic-validator/sdk/java",
+			"uncertain", "pip install semantic-validator==0.3.0", "semantic-validator/sdk/java",
+			"npm install @jorge-arequipa/semantic-validator@0.3.0",
+			`from "@jorge-arequipa/semantic-validator"`,
 			"sdk/go@v0.3.0",
+			"TYPESAFE_API_KEY=", "source ./.env", "set -a", "set +a",
+			"unset TYPESAFE_API_KEY", "npm init -y", "<table>", "<details>",
 		} {
 			if !strings.Contains(page.Body.String(), expected) {
 				t.Errorf("%s: incomplete usage guide, missing %s", path, expected)

@@ -1,4 +1,4 @@
-import { SemanticValidatorError, type ValidationResult, type DirectValidator } from "@semantic-validator/sdk";
+import { SemanticValidatorError, type ValidationResult, type DirectValidator } from "@jorge-arequipa/semantic-validator";
 
 export const cases = [
   { id: "compra", message: "Quiero comprar dos taladros. ¿Cómo puedo pagar?", expected: "Compra: sí; reclamo: no." },

@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { SemanticValidatorError, type ValidationResult } from "@semantic-validator/sdk";
+import { SemanticValidatorError, type ValidationResult } from "@jorge-arequipa/semantic-validator";
 import { validateForm } from "./form.js";
 
 test("form accepts, rejects and requests review without collapsing the states", async () => {

@@ -13,18 +13,27 @@ propia sigue disponible.
 La ruta `/` redirige a la documentación de SDKs en `/docs/`.
 El código se distribuye bajo [Apache License 2.0](LICENSE) en el
 [repositorio de GitHub](https://github.com/eduardoArequipa/semantic-validator).
-Los SDKs TypeScript, Python y Java aún no están publicados en sus registros;
+El SDK TypeScript ya está publicado en npm como
+[`@jorge-arequipa/semantic-validator`](https://www.npmjs.com/package/@jorge-arequipa/semantic-validator).
+El SDK Python está en PyPI como
+[`semantic-validator`](https://pypi.org/project/semantic-validator/).
+Java aún no está publicado en Maven Central;
 el SDK Go forma parte de este módulo público. Consulta
 [las notas de código abierto](docs/OPEN_SOURCE.es.md) y la
 [guía de SDKs directos](https://validator.trialsur.cloud/docs/byok.html) y la
 [guía de servidor propio](docs/GETTING_STARTED.md).
+
+El código TypeScript actual usa `@jorge-arequipa/semantic-validator`.
+Los archivos de la versión v0.3.0 ya publicada en GitHub conservan el nombre
+original, `@semantic-validator/sdk`; para esos archivos consulta
+[la guía de versiones](docs/RELEASE.es.md).
 
 ## Uso directo sin nuestro servidor
 
 Guarda `TYPESAFE_API_KEY` en un backend de confianza. En TypeScript:
 
 ```ts
-import { DirectValidator } from "@semantic-validator/sdk";
+import { DirectValidator } from "@jorge-arequipa/semantic-validator";
 
 const jevApiKey = process.env.TYPESAFE_API_KEY;
 if (!jevApiKey) throw new Error("Falta TYPESAFE_API_KEY");

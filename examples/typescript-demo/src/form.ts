@@ -1,4 +1,4 @@
-import type { DirectValidator, ValidationResult } from "@semantic-validator/sdk";
+import type { DirectValidator, ValidationResult } from "@jorge-arequipa/semantic-validator";
 import { errorMessage } from "./demo.js";
 
 export interface FormFields {

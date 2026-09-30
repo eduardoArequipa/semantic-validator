@@ -1,4 +1,4 @@
-import { DirectValidator } from "@semantic-validator/sdk";
+import { DirectValidator } from "@jorge-arequipa/semantic-validator";
 import { cases, describe, errorMessage, evaluate } from "./demo.js";
 
 async function main() {

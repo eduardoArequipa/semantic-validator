@@ -12,6 +12,8 @@
 **/*.egg-info/
 **/.venv/
 /.venv-laya/
+/.venv-publish/
+/sdk/python/build/
 /sdk/typescript/node_modules/
 /sdk/typescript/dist/
 /sdk/typescript/*.tgz

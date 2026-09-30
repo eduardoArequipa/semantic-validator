@@ -14,7 +14,7 @@
     "test": "npm run build && node --test dist/*.test.js"
   },
   "dependencies": {
-    "@semantic-validator/sdk": "file:vendor/semantic-validator-sdk-0.3.0.tgz"
+    "@jorge-arequipa/semantic-validator": "file:vendor/jorge-arequipa-semantic-validator-0.3.0.tgz"
   },
   "devDependencies": {
     "@types/node": "^22.0.0",

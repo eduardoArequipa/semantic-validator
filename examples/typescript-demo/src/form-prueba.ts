@@ -1,4 +1,4 @@
-import { DirectValidator } from "@semantic-validator/sdk";
+import { DirectValidator } from "@jorge-arequipa/semantic-validator";
 import { validateForm } from "./form.js";
 
 async function main() {

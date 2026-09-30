@@ -19,9 +19,18 @@ fictional benchmark, not a general accuracy claim.
 
 The code is available under [Apache License 2.0](LICENSE) in the
 [GitHub repository](https://github.com/eduardoArequipa/semantic-validator);
-Jev itself is not included. The TypeScript, Python, and Java SDKs are not yet
-published to npm, PyPI, or Maven Central. The Go SDK is part of this module
+Jev itself is not included. The TypeScript SDK is published on npm as
+[`@jorge-arequipa/semantic-validator`](https://www.npmjs.com/package/@jorge-arequipa/semantic-validator).
+The Python SDK is published on PyPI as
+[`semantic-validator`](https://pypi.org/project/semantic-validator/).
+The Java SDK is not yet published to Maven Central.
+The Go SDK is part of this module
 at `github.com/eduardoArequipa/semantic-validator/sdk/go`.
+
+The current TypeScript checkout uses `@jorge-arequipa/semantic-validator`.
+The existing v0.3.0 release archives retain their original package name,
+`@semantic-validator/sdk`; follow [the release guide](docs/RELEASE.md) when
+installing those archives.
 
 ## Bring your own Jev key
 
@@ -34,7 +43,7 @@ give callers a separate `SEMANTIC_VALIDATOR_API_KEY`. See the
 [self-hosted guide](docs/GETTING_STARTED.md).
 
 ```ts
-import { DirectValidator } from "@semantic-validator/sdk";
+import { DirectValidator } from "@jorge-arequipa/semantic-validator";
 
 const jevApiKey = process.env.TYPESAFE_API_KEY;
 if (!jevApiKey) throw new Error("Missing TYPESAFE_API_KEY");

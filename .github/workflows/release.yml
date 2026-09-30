@@ -51,7 +51,7 @@ jobs:
             note_option=(--generate-notes)
           fi
           gh release create "$GITHUB_REF_NAME" \
-            dist/release/semantic-validator-sdk-*.tgz \
+            dist/release/jorge-arequipa-semantic-validator-*.tgz \
             dist/release/semantic-validator-python-*.tar.gz \
             dist/release/semantic-validator-go-*.tar.gz \
             dist/release/semantic-validator-java-*.tar.gz \

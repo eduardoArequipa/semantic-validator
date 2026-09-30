@@ -3,12 +3,16 @@
 TypeScript clients for direct Jev BYOK and for a self-hosted Semantic Validator REST API. Requires Node.js 18+.
 
 The built-in field rules are `person_name`, `product_description`, and `address` (v1).
-Use `validate(rule, value)` for them; see the [definitions](../../docs/RULES.md).
+Use `validate(rule, value)` for them; see the [definitions](https://github.com/eduardoArequipa/semantic-validator/blob/main/docs/RULES.md).
+
+The npm package name is `@jorge-arequipa/semantic-validator`. The registry
+installation command is `npm install @jorge-arequipa/semantic-validator`.
+For installation from a checkout, use the local instructions below.
 
 ## Direct Jev mode (recommended)
 
 ```ts
-import { DirectValidator } from "@semantic-validator/sdk";
+import { DirectValidator } from "@jorge-arequipa/semantic-validator";
 
 const jevApiKey = process.env.TYPESAFE_API_KEY;
 if (!jevApiKey) throw new Error("Missing TYPESAFE_API_KEY");
@@ -37,7 +41,7 @@ npm install /path/to/semantic-validator/sdk/typescript
 ## Self-hosted server mode (optional)
 
 ```ts
-import { Validator } from "@semantic-validator/sdk";
+import { Validator } from "@jorge-arequipa/semantic-validator";
 
 const validator = new Validator({
   apiKey: process.env.SEMANTIC_VALIDATOR_API_KEY!,

@@ -24,8 +24,9 @@ separate service used with each developer's own key and account.
    served by the website; inspect them before publishing. The old TypeScript
    demo archive remains in the source tree but is not embedded or served.
 5. The public Go module path is
-   `github.com/eduardoArequipa/semantic-validator`. The TypeScript, Python,
-   and Java SDKs are not yet published to package registries. Review Jev/TypeSafe
+   `github.com/eduardoArequipa/semantic-validator`. The TypeScript SDK is on npm
+   as `@jorge-arequipa/semantic-validator`, and the Python SDK is on PyPI as
+   `semantic-validator`. Java registry publication is pending. Review Jev/TypeSafe
    usage and branding terms separately from this project's
    source-code license. The public [TypeSafe agreement](https://typesafe.ai/legal/mca)
    prohibits making its service available as a standalone service. Seek written

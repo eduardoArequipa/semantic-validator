@@ -1,8 +1,19 @@
 {
-  "name": "@semantic-validator/sdk",
+  "name": "@jorge-arequipa/semantic-validator",
   "version": "0.3.0",
   "description": "TypeScript SDK for direct Jev semantic validation and optional self-hosted API",
   "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/eduardoArequipa/semantic-validator.git",
+    "directory": "sdk/typescript"
+  },
+  "homepage": "https://github.com/eduardoArequipa/semantic-validator/tree/main/sdk/typescript",
+  "bugs": "https://github.com/eduardoArequipa/semantic-validator/issues",
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
   "type": "module",
   "files": ["dist"],
   "main": "./dist/index.js",
@@ -15,6 +26,7 @@
   },
   "scripts": {
     "build": "tsc -p tsconfig.json",
+    "prepack": "npm run build",
     "test": "npm run build && node --test test/direct.test.mjs"
   },
   "engines": {

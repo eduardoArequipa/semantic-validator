@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { DirectValidator, SemanticValidatorError } from "@semantic-validator/sdk";
+import { DirectValidator, SemanticValidatorError } from "@jorge-arequipa/semantic-validator";
 import { describe, errorMessage, evaluate } from "./demo.js";
 
 test("el SDK consulta Jev directamente y preserva uncertain y decisiones independientes", async () => {

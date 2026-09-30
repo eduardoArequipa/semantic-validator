@@ -24,8 +24,9 @@ y cuenta.
    contenido antes de publicar. El archivo de la antigua demo TypeScript
    permanece en el código, pero no se incorpora ni se sirve.
 5. La ruta pública del módulo Go es
-   `github.com/eduardoArequipa/semantic-validator`. Los SDKs TypeScript,
-   Python y Java aún no están publicados en registros de paquetes. Considerar por
+   `github.com/eduardoArequipa/semantic-validator`. El SDK TypeScript está en npm
+   como `@jorge-arequipa/semantic-validator`, y el SDK Python está en PyPI como
+   `semantic-validator`. La publicación de Java está pendiente. Considerar por
    separado las condiciones de uso y marca de Jev/TypeSafe al distribuir el
    proveedor y ofrecer el servicio alojado. El
    [acuerdo público de TypeSafe](https://typesafe.ai/legal/mca) prohíbe ofrecer

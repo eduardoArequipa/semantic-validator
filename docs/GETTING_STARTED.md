@@ -7,8 +7,10 @@ without a server, see the [direct guide](https://validator.trialsur.cloud/docs/b
 Obtain your own Jev key from
 TypeSafe and run Semantic Validator on your machine or infrastructure. Jev's
 key belongs only on the server. Your SDK uses a *different* key that you
-configure for this instance. None of the SDKs is in a public package registry
-yet. The legacy `Validator` classes below call your server; the new direct
+configure for this instance. The TypeScript SDK is on npm as
+`@jorge-arequipa/semantic-validator`, and the Python SDK is on PyPI as
+`semantic-validator`. Java registry publication is pending. The legacy
+`Validator` classes below call your server; the new direct
 clients call Jev with your key. Read the
 [provider-terms caution](../README.md#bring-your-own-jev-key)
 before offering an externally accessible service.
@@ -78,7 +80,7 @@ npm install /path/to/semantic-validator/sdk/typescript
 ```
 
 ```ts
-import { Validator } from "@semantic-validator/sdk";
+import { Validator } from "@jorge-arequipa/semantic-validator";
 
 const validator = new Validator({
   apiKey: process.env.SEMANTIC_VALIDATOR_API_KEY!,

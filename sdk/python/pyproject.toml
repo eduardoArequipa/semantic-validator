@@ -1,5 +1,5 @@
 [build-system]
-requires = ["setuptools>=68"]
+requires = ["setuptools>=77.0.3"]
 build-backend = "setuptools.build_meta"
 
 [project]
@@ -8,9 +8,24 @@ version = "0.3.0"
 description = "Python SDK for direct Jev semantic validation and optional self-hosted API"
 readme = "README.md"
 requires-python = ">=3.10"
-license = {text = "Apache-2.0"}
+license = "Apache-2.0"
+license-files = ["LICENSE"]
 authors = [{name = "Semantic Validator"}]
 dependencies = []
+keywords = ["semantic-validation", "validation", "jev", "sdk"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+    "Operating System :: OS Independent",
+]
+
+[project.urls]
+Homepage = "https://github.com/eduardoArequipa/semantic-validator"
+Repository = "https://github.com/eduardoArequipa/semantic-validator"
+Documentation = "https://github.com/eduardoArequipa/semantic-validator/tree/main/sdk/python"
+Issues = "https://github.com/eduardoArequipa/semantic-validator/issues"
 
 [tool.setuptools.packages.find]
 where = ["src"]

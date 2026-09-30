@@ -1,6 +1,6 @@
 # Prueba directa con Jev: compra y reclamos
 
-Este ejemplo usa el SDK TypeScript `0.3.0` desde Node.js 22+. Analiza cada mensaje con dos preguntas: intención de compra y presentación de un reclamo. Las decisiones pueden ser sí, no o inciertas.
+Este ejemplo usa el SDK TypeScript `0.3.0`, con el nombre de paquete `@jorge-arequipa/semantic-validator`, desde Node.js 22+. Analiza cada mensaje con dos preguntas: intención de compra y presentación de un reclamo. Las decisiones pueden ser sí, no o inciertas.
 
 Necesitas tu **propia clave de Jev** de TypeSafe. No necesitas nuestro servidor ni una clave de Semantic Validator. El SDK está incluido en `vendor/`; `npm ci` descarga las herramientas de compilación fijadas en el archivo de bloqueo.
 

@@ -52,7 +52,7 @@ git archive --format=tar.gz --prefix=semantic-validator/ \
 (
   cd dist/release
   sha256sum \
-    "semantic-validator-sdk-${version}.tgz" \
+    "jorge-arequipa-semantic-validator-${version}.tgz" \
     "semantic-validator-python-${version}.tar.gz" \
     "semantic-validator-go-${version}.tar.gz" \
     "semantic-validator-java-${version}.tar.gz" > SHA256SUMS.txt
